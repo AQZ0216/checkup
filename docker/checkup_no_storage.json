@@ -1,0 +1,292 @@
+{
+    "concurrent_checks": 1,
+    "checkers": [
+        {
+            "type": "http",
+            "endpoint_url": "https://ews.cybavo.com",
+            "endpoint_name": "EWS",
+            "cert_expire_nday_check": 3
+        },
+        {
+            "type": "http",
+            "endpoint_url": "https://vault.cybavo.com",
+            "endpoint_name": "Vault",
+            "cert_expire_nday_check": 3
+        },
+        {
+            "type": "http",
+            "endpoint_url": "https://tg.cybavocloud.com",
+            "endpoint_name": "Prod-CC",
+            "cert_expire_nday_check": 3
+        },
+        {
+            "type": "http",
+            "endpoint_url": "https://tg.beta.cybavocloud.com",
+            "endpoint_name": "Stage-CC",
+            "cert_expire_nday_check": 3
+        },
+        {
+            "type": "eth",
+            "endpoint_url": "https://vapi.cybavocloud.com/eth",
+            "endpoint_name": "eth-vapi",
+            "parameters": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}",
+            "blockHeightBehind": 20,
+            "apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1"
+        },
+        {
+            "type": "eth",
+            "endpoint_url": "https://vapi.cybavocloud.com/ethtx",
+            "endpoint_name": "ethtx-vapi",
+            "parameters": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}",
+            "blockHeightBehind": 20,
+            "apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1"
+        },
+        {
+            "type": "eth",
+            "endpoint_url": "https://vapi.cybavocloud.com/ethhistory",
+            "endpoint_name": "eth-history-vapi",
+            "parameters": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}",
+            "blockHeightBehind": 20,
+            "apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1"
+        },
+        {
+            "type": "eth",
+            "endpoint_url": "http://192.168.99.13:8634",
+            "endpoint_name": "eth-home",
+            "parameters": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}",
+            "blockHeightBehind": 20,
+            "apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1"
+        },
+        {
+            "type": "eth",
+            "endpoint_url": "http://192.168.99.16:8634",
+            "endpoint_name": "ethtx-home",
+            "parameters": "{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}",
+            "blockHeightBehind": 20,
+            "apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "https://vapi.cybavocloud.com/btc",
+            "endpoint_name": "btc-vapi",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "blockHeightBehind": 2,
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "refer_url": "https://blockchain.info/q/getblockcount"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "http://192.168.99.13:8633",
+            "endpoint_name": "btc-home",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "blockHeightBehind": 2,
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "refer_url": "https://blockchain.info/q/getblockcount"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "https://vapi.cybavocloud.com/ltc",
+            "endpoint_name": "ltc-vapi",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "https://chain.so/api/v2/get_info/LTC"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "http://192.168.99.13:8635",
+            "endpoint_name": "ltc-home",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "https://chain.so/api/v2/get_info/LTC"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "https://vapi.cybavocloud.com/bch",
+            "endpoint_name": "bch-vapi",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "http://www.tokenview.com:8088/coin/latest/BCH"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "http://192.168.99.13:8637",
+            "endpoint_name": "bch-home",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "http://www.tokenview.com:8088/coin/latest/BCH"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "https://vapi.cybavocloud.com/omni",
+            "endpoint_name": "omni-vapi",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "https://blockchain.info/q/getblockcount"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "http://192.168.99.13:8636",
+            "endpoint_name": "omni-home",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "https://blockchain.info/q/getblockcount"
+        },
+        {
+            "type": "btc",
+            "endpoint_url": "http://192.168.99.17:8636",
+            "endpoint_name": "omni-home2",
+            "user": "cybavo",
+            "password": "cbo54321!",
+            "parameters": "{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockchaininfo\", \"params\": [] }",
+            "blockHeightBehind": 2,
+            "refer_url": "https://blockchain.info/q/getblockcount"
+        },
+        {
+            "type": "eos",
+            "endpoint_url": "https://vapi.cybavocloud.com/eos/v1/chain/get_info",
+            "endpoint_name": "eos-vapi",
+            "blockHeightBehind": 3600
+        },
+        {
+            "type": "eos",
+            "endpoint_url": "http://192.168.99.17:8888/v1/chain/get_info",
+            "endpoint_name": "eos-home",
+            "blockHeightBehind": 3600,
+            "refer_url": "https://proxy.eosnode.tools/v1/chain/get_info"
+        },
+        {
+            "type": "tron",
+            "endpoint_url": "https://vapi.cybavocloud.com/tronapi/wallet/getnowblock",
+            "endpoint_name": "tron-vapi",
+            "blockHeightBehind": 3600
+        },
+        {
+            "type": "tron",
+            "endpoint_url": "http://192.168.99.16:8638/wallet/getnowblock",
+            "endpoint_name": "tron-home",
+            "blockHeightBehind": 3600,
+            "refer_url": "https://api.trongrid.io/wallet/getnowblock"
+        },
+        {
+            "type": "bnc",
+            "endpoint_url": "https://vapi.cybavocloud.com/bnc/status",
+            "endpoint_name": "bnc-vapi",
+            "blockHeightBehind": 3600,
+            "refer_url": "https://dex.binance.org/api/v1/node-info"
+        },
+        {
+            "type": "bnc",
+            "endpoint_url": "http://192.168.99.17:8639/status",
+            "endpoint_name": "bnc-home",
+            "blockHeightBehind": 3600,
+            "refer_url": "https://dex.binance.org/api/v1/node-info"
+        },
+        {
+			"type": "ethledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "eth-ledger",
+			"blockHeightBehind": 20,
+			"apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "btc-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "https://blockchain.info/q/getblockcount",
+			"coin": "btc",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "ltc-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "https://chain.so/api/v2/get_info/LTC",
+			"coin": "ltc",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "bch-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "http://www.tokenview.com:8088/coin/latest/BCH",
+			"coin": "bch",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "eosledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "eos-ledger",
+			"blockHeightBehind": 3600,
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "tronledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "tron-ledger",
+            "blockHeightBehind": 3600,
+			"refer_url": "https://api.trongrid.io/wallet/getnowblock",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "bncledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "bnc-ledger",
+            "blockHeightBehind": 3600,
+			"refer_url": "https://dex.binance.org/api/v1/node-info",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "xrpledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "xrp-ledger",
+            "blockHeightBehind": 100,
+			"refer_url": "https://data.ripple.com/v2/ledgers",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		}
+    ],
+    "notifier": {
+        "name": "telegram",
+        "token": "",
+        "groupId": -1001205117642
+    },
+    "notifierstatus": {
+        "name": "gmail",
+        "username": "CBOAutoBuild@gmail.com",
+        "password": "123456qw!!",
+        "list": "andytsai@cybavo.com,andydong@cybavo.com,aawen@cybavo.com"
+    }
+}

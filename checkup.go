@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/sourcegraph/checkup/utils"
 )
 
 // Checkup performs a routine checkup on endpoints or
@@ -44,7 +45,8 @@ type Checkup struct {
 	// results after checks from all checkers have
 	// completed. Notifier may evaluate and choose to
 	// send a notification of potential problems.
-	Notifier Notifier `json:"notifier,omitempty"`
+	Notifier       Notifier `json:"notifier,omitempty"`
+	NotifierStatus Notifier `json:"notifierstatus,omitempty"`
 }
 
 // Check performs the health checks. An error is only
@@ -127,12 +129,42 @@ func (c Checkup) CheckAndStore() error {
 // in a goroutine). Any errors are written to the standard logger. It
 // would not be wise to set an interval lower than the time it takes
 // to perform the checks.
-func (c Checkup) CheckAndStoreEvery(interval time.Duration) *time.Ticker {
+func (c Checkup) CheckAndStoreEvery(interval time.Duration, statusinterval time.Duration) *time.Ticker {
 	ticker := time.NewTicker(interval)
 	go func() {
 		for range ticker.C {
-			if err := c.CheckAndStore(); err != nil {
+			utils.GlobalCacheClear()
+			err := c.CheckAndStore()
+			if err != nil {
 				log.Println(err)
+			}
+		}
+	}()
+	return ticker
+}
+
+// CheckEvery calls Check every interval.
+func (c Checkup) CheckEvery(interval time.Duration, statusinterval time.Duration) *time.Ticker {
+	ticker := time.NewTicker(interval)
+	go func() {
+		var timercount time.Duration
+		for range ticker.C {
+			utils.GlobalCacheClear()
+			results, err := c.Check()
+			if err != nil {
+				log.Println(err)
+			}
+			fmt.Println(results)
+			if statusinterval >= interval {
+				timercount = timercount + interval
+				if timercount >= statusinterval {
+					log.Println("Send status report")
+					timercount = timercount - statusinterval
+					if c.NotifierStatus != nil {
+						c.NotifierStatus.NotifyAll(results)
+					}
+
+				}
 			}
 		}
 	}()
@@ -183,8 +215,32 @@ func (c Checkup) MarshalJSON() ([]byte, error) {
 				typeName = "dns"
 			case TLSChecker:
 				typeName = "tls"
+			case RPCChecker:
+				typeName = "rpc"
+			case ETHChecker:
+				typeName = "eth"
+			case EOSChecker:
+				typeName = "eos"
+			case BTCChecker:
+				typeName = "btc"
+			case TronChecker:
+				typeName = "tron"
+			case BNCChecker:
+				typeName = "bnc"
+			case ETHLedgerChecker:
+				typeName = "ethledger"
+			case EOSLedgerChecker:
+				typeName = "eosledger"
+			case BTCLedgerChecker:
+				typeName = "btcledger"
+			case TronLedgerChecker:
+				typeName = "tronledger"
+			case BNCLedgerChecker:
+				typeName = "tronledger"
+			case XRPLedgerChecker:
+				typeName = "xrpledger"
 			default:
-				return result, fmt.Errorf("unknown Checker type")
+				return result, fmt.Errorf("unknown Checker type @MarshalJSON")
 			}
 			chb = []byte(fmt.Sprintf(`{"type":"%s",%s`, typeName, string(chb[1:])))
 			checkers = append(checkers, chb)
@@ -229,11 +285,35 @@ func (c Checkup) MarshalJSON() ([]byte, error) {
 		switch c.Notifier.(type) {
 		case Slack:
 			notifierName = "slack"
+		case Gmail:
+			notifierName = "gmail"
+		case Telegram:
+			notifierName = "telegram"
 		default:
 			return result, fmt.Errorf("unknown Notifier type")
 		}
 		nb = []byte(fmt.Sprintf(`{"name":"%s",%s`, notifierName, string(nb[1:])))
 		wrap("notifier", nb)
+	}
+
+	if c.NotifierStatus != nil {
+		nb, err := json.Marshal(c.NotifierStatus)
+		if err != nil {
+			return result, err
+		}
+		var notifierName string
+		switch c.NotifierStatus.(type) {
+		case Slack:
+			notifierName = "slack"
+		case Gmail:
+			notifierName = "gmail"
+		case Telegram:
+			notifierName = "telegram"
+		default:
+			return result, fmt.Errorf("unknown NotifierStatus type")
+		}
+		nb = []byte(fmt.Sprintf(`{"name":"%s",%s`, notifierName, string(nb[1:])))
+		wrap("notifierstatus", nb)
 	}
 
 	return result, nil
@@ -254,9 +334,10 @@ func (c *Checkup) UnmarshalJSON(b []byte) error {
 	// Begin unmarshaling interface values by
 	// collecting the raw JSON
 	raw := struct {
-		Checkers []json.RawMessage `json:"checkers"`
-		Storage  json.RawMessage   `json:"storage"`
-		Notifier json.RawMessage   `json:"notifier"`
+		Checkers       []json.RawMessage `json:"checkers"`
+		Storage        json.RawMessage   `json:"storage"`
+		Notifier       json.RawMessage   `json:"notifier"`
+		NotifierStatus json.RawMessage   `json:"notifierstatus"`
 	}{}
 	err := json.Unmarshal([]byte(b), &raw)
 	if err != nil {
@@ -272,6 +353,12 @@ func (c *Checkup) UnmarshalJSON(b []byte) error {
 			Provider string `json:"provider"`
 		}
 		Notifier struct {
+			Name     string `json:"name"`
+			Username string `json:"username"`
+			Channel  string `json:"channel"`
+			Webhook  string `json:"webhook"`
+		}
+		NotifierStatus struct {
 			Name     string `json:"name"`
 			Username string `json:"username"`
 			Channel  string `json:"channel"`
@@ -310,6 +397,90 @@ func (c *Checkup) UnmarshalJSON(b []byte) error {
 			c.Checkers = append(c.Checkers, checker)
 		case "tls":
 			var checker TLSChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "rpc":
+			var checker RPCChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "eth":
+			var checker ETHChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "eos":
+			var checker EOSChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "btc":
+			var checker BTCChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "tron":
+			var checker TronChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "bnc":
+			var checker BNCChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "ethledger":
+			var checker ETHLedgerChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "eosledger":
+			var checker EOSLedgerChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "btcledger":
+			var checker BTCLedgerChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "tronledger":
+			var checker TronLedgerChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "bncledger":
+			var checker BNCLedgerChecker
+			err = json.Unmarshal(raw.Checkers[i], &checker)
+			if err != nil {
+				return err
+			}
+			c.Checkers = append(c.Checkers, checker)
+		case "xrpledger":
+			var checker XRPLedgerChecker
 			err = json.Unmarshal(raw.Checkers[i], &checker)
 			if err != nil {
 				return err
@@ -362,11 +533,51 @@ func (c *Checkup) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			c.Notifier = notifier
+		case "gmail":
+			var notifier Gmail
+			err = json.Unmarshal(raw.Notifier, &notifier)
+			if err != nil {
+				return err
+			}
+			c.Notifier = notifier
+		case "telegram":
+			var notifier Telegram
+			err = json.Unmarshal(raw.Notifier, &notifier)
+			if err != nil {
+				return err
+			}
+			c.Notifier = notifier
 		default:
 			return fmt.Errorf("%s: unknown Notifier type", types.Notifier.Name)
 		}
 	}
-
+	if raw.NotifierStatus != nil {
+		switch types.NotifierStatus.Name {
+		case "slack":
+			var notifier Slack
+			err = json.Unmarshal(raw.NotifierStatus, &notifier)
+			if err != nil {
+				return err
+			}
+			c.NotifierStatus = notifier
+		case "gmail":
+			var notifier Gmail
+			err = json.Unmarshal(raw.NotifierStatus, &notifier)
+			if err != nil {
+				return err
+			}
+			c.NotifierStatus = notifier
+		case "telegram":
+			var notifier Telegram
+			err = json.Unmarshal(raw.NotifierStatus, &notifier)
+			if err != nil {
+				return err
+			}
+			c.NotifierStatus = notifier
+		default:
+			return fmt.Errorf("%s: unknown NotifierStatus type", types.NotifierStatus.Name)
+		}
+	}
 	return nil
 }
 
@@ -402,6 +613,7 @@ type Maintainer interface {
 // more often than the admin would like.
 type Notifier interface {
 	Notify([]Result) error
+	NotifyAll([]Result) error
 }
 
 // DefaultConcurrentChecks is how many checks,
@@ -498,12 +710,12 @@ func (r Result) ComputeStats() Stats {
 func (r Result) String() string {
 	stats := r.ComputeStats()
 	s := fmt.Sprintf("== %s - %s\n", r.Title, r.Endpoint)
-	s += fmt.Sprintf("  Threshold: %s\n", r.ThresholdRTT)
-	s += fmt.Sprintf("        Max: %s\n", stats.Max)
-	s += fmt.Sprintf("        Min: %s\n", stats.Min)
-	s += fmt.Sprintf("     Median: %s\n", stats.Median)
-	s += fmt.Sprintf("       Mean: %s\n", stats.Mean)
-	s += fmt.Sprintf("        All: %v\n", r.Times)
+	s += fmt.Sprintf("  Threshold: %s,", r.ThresholdRTT)
+	s += fmt.Sprintf(" Max: %s,", stats.Max)
+	s += fmt.Sprintf(" Min: %s,", stats.Min)
+	s += fmt.Sprintf(" Median: %s,", stats.Median)
+	s += fmt.Sprintf(" Mean: %s\n", stats.Mean)
+	s += fmt.Sprintf("  All: %v,", r.Times)
 	statusLine := fmt.Sprintf(" Assessment: %v\n", r.Status())
 	switch r.Status() {
 	case Healthy:

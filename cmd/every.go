@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var statusupdatetime string
+
 var everyCmd = &cobra.Command{
 	Use:   "every",
 	Short: "Run checks indefinitely at an interval",
@@ -57,20 +59,29 @@ Examples:
 			log.Fatal(err)
 		}
 
+		var statusinterval time.Duration = 0
+
+		if statusupdatetime != "" {
+			statusinterval, err = time.ParseDuration(statusupdatetime)
+		}
+
+		log.Printf("interval:%d statusinterval:%d\n", interval, statusinterval)
 		c := loadCheckup()
 		if len(c.Checkers) == 0 {
 			log.Fatal("no checkers configured")
 		}
 		if c.Storage == nil {
-			log.Fatal("no storage configured")
+			log.Println("no storage configured")
+			c.CheckEvery(interval, statusinterval)
+		} else {
+			c.CheckAndStoreEvery(interval, statusinterval)
 		}
-
-		c.CheckAndStoreEvery(interval)
 		select {}
 	},
 }
 
 func init() {
+	everyCmd.Flags().StringVarP(&statusupdatetime, "report", "r", "", "The name/title of the endpoint this message is about")
 	RootCmd.AddCommand(everyCmd)
 
 }

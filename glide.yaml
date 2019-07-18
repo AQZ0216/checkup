@@ -1,0 +1,38 @@
+package: github.com/sourcegraph/checkup
+import:
+- package: github.com/ashwanthkumar/slack-go-webhook
+  version: ^0.2.0
+- package: github.com/aws/aws-sdk-go
+  version: ^1.15.57
+  subpackages:
+  - aws
+  - aws/client
+  - aws/credentials
+  - aws/session
+  - service/iam
+  - service/s3
+- package: github.com/fatih/color
+  version: ^1.7.0
+- package: github.com/google/go-github
+  version: ^18.2.0
+  subpackages:
+  - github
+- package: github.com/jmoiron/sqlx
+  version: ^1.2.0
+- package: github.com/lib/pq
+  version: ^1.0.0
+- package: github.com/mattn/go-sqlite3
+  version: ^1.9.0
+- package: github.com/miekg/dns
+  version: ^1.0.13
+- package: github.com/spf13/cobra
+  version: ^0.0.3
+- package: golang.org/x/oauth2
+- package: gopkg.in/gomail.v2
+  version: ^2.0.0
+- package: github.com/go-telegram-bot-api/telegram-bot-api
+  version: ^5.0.0-rc1
+- package: github.com/nanmu42/etherscan-api
+  repo: git@bitbucket.org:cybavo/etherscan-api.git
+- package: github.com/eoscanada/eos-go
+  repo: git@bitbucket.org:cybavo/eos-go

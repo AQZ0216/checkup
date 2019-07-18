@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+    fullnode_healthcheck:
+        image: 192.168.99.32:80/cybavo/fullnode_healthcheck:v1.0
+        restart: on-failure
+        entrypoint: /main -v -c /checkup.json every 10m -r 720m
+#        entrypoint: /main -c /checkup.json
+        volumes:
+            - ${PWD}/checkup_no_storage.json:/checkup.json
+        stop_signal: SIGINT

@@ -26,6 +26,15 @@ func (s Slack) Notify(results []Result) error {
 	return nil
 }
 
+func (s Slack) NotifyAll(results []Result) error {
+	for _, result := range results {
+		//if !result.Healthy {
+		s.Send(result)
+		//}
+	}
+	return nil
+}
+
 // Send request via Slack API to create incident
 func (s Slack) Send(result Result) error {
 	color := "danger"

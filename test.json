@@ -1,0 +1,91 @@
+{
+	"checkers": [
+		{
+			"type": "ethledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "eth-ledger",
+			"blockHeightBehind": 20,
+			"apiKey": "NW32QHSHKP5696M4TN3TAMIFRRYGRJ64H1",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "btc-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "https://blockchain.info/q/getblockcount",
+			"coin": "btc",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "ltc-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "https://chain.so/api/v2/get_info/LTC",
+			"coin": "ltc",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+			"type": "btcledger",
+			"endpoint_url": "https://api.ledger.cybavo.com:10443",
+			"endpoint_name": "bch-ledger",
+			"blockHeightBehind": 2,
+			"refer_url": "http://www.tokenview.com:8088/coin/latest/BCH",
+			"coin": "bch",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "eosledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "eos-ledger",
+			"blockHeightBehind": 3600,
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "tronledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "tron-ledger",
+            "blockHeightBehind": 3600,
+			"refer_url": "https://api.trongrid.io/wallet/getnowblock",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "bncledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "bnc-ledger",
+            "blockHeightBehind": 3600,
+			"refer_url": "https://dex.binance.org/api/v1/node-info",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		},
+		{
+            "type": "xrpledger",
+            "endpoint_url": "https://api.ledger.cybavo.com:10443",
+            "endpoint_name": "xrp-ledger",
+            "blockHeightBehind": 100,
+			"refer_url": "https://data.ripple.com/v2/ledgers",
+			"myAPICode": "CBO-B47B-72779543DA6B",
+			"mySecretKey": "2418F9C8-96A2-41E6-9672-435F8A3A9015", 
+			"sigHeader": "X-Cybavo-Apisig"
+		}
+	],
+	"notifier": {
+		"name": "telegram",
+		"token": "636168812:AAG5mTctqqu6kCH01r9a_oiCvmvKrmbtyqI",
+		"groupId": -1001205117642
+	}
+}
